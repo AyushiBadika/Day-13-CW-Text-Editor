@@ -106,8 +106,7 @@ function MainSection({ themeState, themeDispatch }) {
     } else if (action.type === "REMOVEEXTRASPACES") return state?.trim();
   };
   const [state, dispatch] = useReducer(textReducer, "");
-  const [readingTime, setReadingTime] = useState(0);
-  let initialTime = 0;
+
   console.log(state);
 
   return (
@@ -134,7 +133,6 @@ function MainSection({ themeState, themeDispatch }) {
           Enter Your Text Here :
         </h4>
         <textarea
-          onFocus={() => (initialTime = Date.now())}
           className={`h-[200px]  focus:outline-blue-500 focus:border-0 p-4  shadow-blue-500 mb-8 ${
             themeState === "Dark"
               ? "bg-[#212529] text-white"
@@ -144,8 +142,6 @@ function MainSection({ themeState, themeDispatch }) {
           id="userData"
           value={state}
           onChange={(e) => {
-            if (state.length < 1)
-              setReadingTime(() => (Date.now() - initialTime) / 1000);
             dispatch({ type: "CHANGETEXT", payload: e.currentTarget.value });
           }}
         ></textarea>
@@ -207,11 +203,7 @@ function MainSection({ themeState, themeDispatch }) {
           Remove Extra Spaces
         </button>
       </div>
-      <Summary
-        themeState={themeState}
-        state={state}
-        readingTime={readingTime}
-      />
+      <Summary themeState={themeState} state={state} />
       <div>
         <h3
           className={`text-2xl font-bold mt-8  mb-4 text-center ${
@@ -235,7 +227,7 @@ function MainSection({ themeState, themeDispatch }) {
   );
 }
 
-function Summary({ themeState, state, readingTime }) {
+function Summary({ themeState, state }) {
   return (
     <div>
       <h2
@@ -264,7 +256,7 @@ function Summary({ themeState, state, readingTime }) {
           themeState === "Dark" ? "text-white" : "text-black"
         }`}
       >
-        Reading Time: {readingTime}
+        Reading Time: {state !== "" ? state.split(" ").length * 0.08 : 0}
       </div>
     </div>
   );
